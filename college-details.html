@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>College Details</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="js/db.js"></script>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f2f5;
+      padding: 30px;
+    }
+    .card {
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    .card h3 {
+      font-weight: bold;
+    }
+    .info p {
+      margin-bottom: 8px;
+    }
+    .apply-btn {
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card p-4">
+      <h3 id="collegeName">Loading...</h3>
+      <hr/>
+      <div class="info">
+        <p><strong>Location:</strong> <span id="collegeLocation"></span></p>
+        <p><strong>Career Field:</strong> <span id="collegeCareer"></span></p>
+        <p><strong>Fee:</strong> <span id="collegeFee"></span></p>
+        <p><strong>Eligibility:</strong> <span id="collegeEligibility"></span></p>
+        <p><strong>Facilities:</strong> <span id="collegeFacilities"></span></p>
+        <p><strong>Placement:</strong> <span id="collegePlacement"></span></p>
+        <p><strong>Scholarship:</strong> <span id="collegeScholarship"></span></p>
+        <p><strong>Rules:</strong> <span id="collegeRules"></span></p>
+        <p><strong>Description:</strong> <span id="collegeDescription"></span></p>
+      </div>
+
+      <div class="apply-btn mt-4">
+        <a href="#" class="btn btn-success" id="applyBtn">Apply Now</a>
+        <a href="college-list.html" class="btn btn-secondary ml-2">← Back to List</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+      alert("No college ID provided!");
+      window.location.href = "college-list.html";
+    }
+
+    const name = document.getElementById("collegeName");
+    const locationEl = document.getElementById("collegeLocation");
+    const career = document.getElementById("collegeCareer");
+    const fee = document.getElementById("collegeFee");
+    const eligibility = document.getElementById("collegeEligibility");
+    const facilities = document.getElementById("collegeFacilities");
+    const placement = document.getElementById("collegePlacement");
+    const scholarship = document.getElementById("collegeScholarship");
+    const rules = document.getElementById("collegeRules");
+    const description = document.getElementById("collegeDescription");
+    const applyBtn = document.getElementById("applyBtn");
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        alert("Please login first!");
+        return (window.location.href = "login.html");
+      }
+
+      db.collection("colleges").doc(id).get().then((doc) => {
+        if (!doc.exists) {
+          alert("College not found!");
+          return window.location.href = "college-list.html";
+        }
+
+        const data = doc.data();
+        name.innerText = data.name;
+        locationEl.innerText = data.location; // ✅ fixed here
+        career.innerText = data.career;
+        fee.innerText = data.fee;
+        eligibility.innerText = data.eligibility;
+        facilities.innerText = data.facilities;
+        placement.innerText = data.placement;
+        scholarship.innerText = data.scholarship;
+        rules.innerText = data.rules;
+        description.innerText = data.description;
+
+        applyBtn.href = `college-registration.html?id=${id}`;
+      }).catch((error) => {
+        console.error("Error loading college:", error);
+        alert("Error loading college details.");
+      });
+    });
+  </script>
+
+</body>
+</html>
+

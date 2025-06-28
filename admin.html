@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title>
+
+  <!-- Bootstrap -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="js/db.js"></script>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      padding: 30px;
+      background-color: #f9f9f9;
+    }
+    .college-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 class="mb-4 text-center">Admin Panel - Manage Colleges</h2>
+
+    <!-- 🔧 Add College Form -->
+    <form id="collegeForm" class="mb-5">
+      <h5>Add New College</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <input type="text" id="collegeId" class="form-control mb-2" placeholder="College ID (e.g. C011)" required />
+          <input type="text" id="collegeName" class="form-control mb-2" placeholder="College Name" required />
+          <input type="text" id="collegeLocation" class="form-control mb-2" placeholder="Location (City, Country)" required />
+          <input type="text" id="collegeCareer" class="form-control mb-2" placeholder="Career (Engineering, Management)" required />
+        </div>
+        <div class="col-md-6">
+          <input type="text" id="collegeFee" class="form-control mb-2" placeholder="Fee" required />
+          <input type="text" id="collegeEligibility" class="form-control mb-2" placeholder="Eligibility Criteria" />
+          <input type="text" id="collegeFacilities" class="form-control mb-2" placeholder="Facilities" />
+          <input type="text" id="collegePlacement" class="form-control mb-2" placeholder="Placement Info" />
+          <input type="text" id="collegeScholarship" class="form-control mb-2" placeholder="Scholarship" />
+          <input type="text" id="collegeRules" class="form-control mb-2" placeholder="Rules" />
+          <textarea id="collegeDescription" class="form-control mb-2" placeholder="Description" rows="2"></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Add College</button>
+    </form>
+
+    <!-- 📋 Display Colleges -->
+    <div id="collegeList">
+      <h5>All Colleges</h5>
+    </div>
+  </div>
+
+  <script>
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const collegeForm = document.getElementById("collegeForm");
+    const collegeList = document.getElementById("collegeList");
+
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        alert("Admin login required");
+        return window.location.href = "login.html";
+      }
+
+      loadColleges(); // Load after auth
+    });
+
+    // ✅ Add college
+    collegeForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const id = document.getElementById("collegeId").value.trim();
+      const data = {
+        name: document.getElementById("collegeName").value.trim(),
+        location: document.getElementById("collegeLocation").value.trim(),
+        career: document.getElementById("collegeCareer").value.trim(),
+        fee: document.getElementById("collegeFee").value.trim(),
+        eligibility: document.getElementById("collegeEligibility").value.trim(),
+        facilities: document.getElementById("collegeFacilities").value.trim(),
+        placement: document.getElementById("collegePlacement").value.trim(),
+        scholarship: document.getElementById("collegeScholarship").value.trim(),
+        rules: document.getElementById("collegeRules").value.trim(),
+        description: document.getElementById("collegeDescription").value.trim()
+      };
+
+      db.collection("colleges").doc(id).set(data).then(() => {
+        alert("College added!");
+        collegeForm.reset();
+        loadColleges();
+      }).catch((err) => {
+        alert("Error adding college: " + err.message);
+      });
+    });
+
+    // 📋 Load colleges list
+    function loadColleges() {
+      collegeList.innerHTML = "<h5>All Colleges</h5>";
+      db.collection("colleges").get().then(snapshot => {
+        snapshot.forEach(doc => {
+          const c = doc.data();
+          const div = document.createElement("div");
+          div.className = "college-card";
+          div.innerHTML = `
+            <strong>${c.name}</strong> (${doc.id})<br/>
+            <small>${c.location} • ${c.career}</small><br/>
+            <button class="btn btn-sm btn-danger mt-2" onclick="deleteCollege('${doc.id}')">Delete</button>
+          `;
+          collegeList.appendChild(div);
+        });
+      });
+    }
+
+    // ❌ Delete college
+    function deleteCollege(id) {
+      if (!confirm("Are you sure you want to delete " + id + "?")) return;
+      db.collection("colleges").doc(id).delete().then(() => {
+        alert("Deleted!");
+        loadColleges();
+      });
+    }
+  </script>
+</body>
+</html>

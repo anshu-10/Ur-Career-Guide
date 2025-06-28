@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aptitude Test Result</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+  <style>
+    body {
+      background: #f3f6fa;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .result-card {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .score {
+      font-size: 28px;
+      font-weight: bold;
+      color: #28a745;
+    }
+    .feedback {
+      font-size: 18px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="result-card">
+    <h2>🎉 Test Completed!</h2>
+    <p class="score" id="scoreDisplay"></p>
+    <p class="feedback" id="feedbackText"></p>
+    <a href="dashboard.html" class="btn btn-primary mt-3">Go to Dashboard</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const score = parseInt(params.get("score"));
+    const total = parseInt(params.get("total"));
+
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const feedbackText = document.getElementById("feedbackText");
+
+    scoreDisplay.textContent = `You scored ${score} out of ${total}`;
+
+    if (score >= 13) {
+      feedbackText.textContent = "Excellent! You have strong aptitude skills.";
+    } else if (score >= 9) {
+      feedbackText.textContent = "Good job! You can improve with a bit more practice.";
+    } else {
+      feedbackText.textContent = "Keep practicing! Focus more on reasoning and grammar.";
+    }
+  </script>
+
+</body>
+</html>

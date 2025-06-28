@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard</title>
+
+  <!-- Bootstrap & Google Fonts -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="js/db.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 40px 20px;
+      background-color: #FFF2E0;
+    }
+    h2 {
+      color: #0B1D51;
+    }
+    .card {
+      background: #C0C9EE;
+      margin-bottom: 20px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+    }
+    .card:hover {
+      background: #A2AADB;
+      transform: scale(1.02);
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.12);
+    }
+    .card h5 {
+      color: #0B1D51;
+    }
+    .btn {
+      border-radius: 30px;
+      font-weight: 600;
+      padding: 10px 24px;
+    }
+    .btn-primary {
+      background-color: #03A6A1;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #0B1D51;
+      color: #FFF2E0;
+    }
+    .btn-outline-primary, .btn-outline-success {
+      color: #0B1D51;
+      border: 2px solid #0B1D51;
+    }
+    .btn-outline-primary:hover, .btn-outline-success:hover {
+      background-color: #0B1D51;
+      color: #FFF2E0;
+    }
+    .logout-btn {
+      background: #0B1D51;
+      color: #fff;
+      border: none;
+      font-size: 0.9rem;
+    }
+    .logout-btn:hover {
+      background: #03A6A1;
+      color: #FFF2E0;
+    }
+    .star-bg {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0; left: 0;
+      background: radial-gradient(#898AC4 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.05;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="star-bg"></div>
+  <div class="container position-relative">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+      <h2>Welcome, <span id="studentName">Student</span> 👋</h2>
+      <button class="btn logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="row">
+      <!-- Career Selection -->
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5 class="mb-3">Choose Career</h5>
+          <a href="college-list.html?career=engineering" class="btn btn-primary mb-2">Engineering</a>
+          <a href="college-list.html?career=management" class="btn btn-primary">Management</a>
+        </div>
+      </div>
+
+      <!-- Location Preference -->
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5 class="mb-3">Study Location</h5>
+          <a href="college-list.html?location=india" class="btn btn-primary mb-2">India</a>
+          <a href="college-list.html?location=abroad" class="btn btn-primary">Abroad</a>
+        </div>
+      </div>
+
+      <!-- Aptitude Test -->
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5 class="mb-3">Aptitude Test</h5>
+          <a href="aptitude-test.html" class="btn btn-primary">Take Test</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <!-- My Applications -->
+      <div class="col-md-6">
+        <div class="card p-4 text-center">
+          <h5 class="mb-3">My Applications</h5>
+          <a href="my-applications.html" class="btn btn-outline-primary">View Applied Colleges</a>
+        </div>
+      </div>
+
+      <!-- Test Results -->
+      <div class="col-md-6">
+        <div class="card p-4 text-center">
+          <h5 class="mb-3">My Test Score</h5>
+          <div id="scoreSection">
+            <p class="mt-2" id="testScore">Loading score...</p>
+            <a href="test-result.html" class="btn btn-outline-success mt-2">View Full Result</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged((user) => {
+      if (!user) return window.location.href = "login.html";
+
+      const uid = user.uid;
+
+      db.collection("users").doc(uid).get().then((doc) => {
+        const name = doc.exists ? doc.data().firstname : "Student";
+        document.getElementById("studentName").innerText = name;
+      });
+
+      db.collection("aptitude_results").doc(uid).get().then((doc) => {
+        if (doc.exists) {
+          const score = doc.data().score;
+          document.getElementById("testScore").innerText = `Your Score: ${score} / 15`;
+        } else {
+          document.getElementById("testScore").innerText = "You haven't taken the test yet.";
+        }
+      });
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+</body>
+</html>
+
