@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Student Dashboard</title>
-
-  <!-- Bootstrap & Google Fonts -->
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | CareerPath Pro</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -16,132 +16,305 @@
   <script src="js/db.js"></script>
 
   <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #3f37c9;
+      --dark: #1b263b;
+      --light: #f8f9fa;
+      --success: #4cc9f0;
+      --warning: #f72585;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --text-dark: #2b2d42;
+      --shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Poppins', sans-serif;
-      padding: 40px 20px;
-      background-color: #FFF2E0;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      min-height: 100vh;
+      padding: 2rem;
+      color: var(--text-dark);
     }
-    h2 {
-      color: #0B1D51;
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    .card {
-      background: #C0C9EE;
-      margin-bottom: 20px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
-      border-radius: 20px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: none;
+
+    /* Header */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
     }
-    .card:hover {
-      background: #A2AADB;
-      transform: scale(1.02);
-      box-shadow: 0 0 18px rgba(0, 0, 0, 0.12);
-    }
-    .card h5 {
-      color: #0B1D51;
-    }
-    .btn {
-      border-radius: 30px;
+
+    .welcome-text h2 {
+      font-size: 1.8rem;
       font-weight: 600;
-      padding: 10px 24px;
+      color: var(--dark);
     }
+
+    #studentName {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(31, 38, 135, 0.15);
+    }
+
+    .card h5 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card h5 i {
+      color: var(--primary);
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      gap: 0.5rem;
+    }
+
     .btn-primary {
-      background-color: #03A6A1;
-      border: none;
+      background: var(--primary);
+      color: white;
     }
+
     .btn-primary:hover {
-      background-color: #0B1D51;
-      color: #FFF2E0;
+      background: var(--secondary);
     }
-    .btn-outline-primary, .btn-outline-success {
-      color: #0B1D51;
-      border: 2px solid #0B1D51;
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
     }
-    .btn-outline-primary:hover, .btn-outline-success:hover {
-      background-color: #0B1D51;
-      color: #FFF2E0;
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
     }
+
     .logout-btn {
-      background: #0B1D51;
-      color: #fff;
-      border: none;
+      background: var(--warning);
+      color: white;
+      padding: 0.6rem 1.2rem;
       font-size: 0.9rem;
+      border-radius: 8px;
     }
+
     .logout-btn:hover {
-      background: #03A6A1;
-      color: #FFF2E0;
+      background: #d91a6a;
     }
-    .star-bg {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0; left: 0;
-      background: radial-gradient(#898AC4 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: 0.05;
-      z-index: 0;
+
+    /* Score Section */
+    .score-display {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--primary);
+      margin: 0.8rem 0;
+      padding: 0.8rem;
+      background: rgba(67, 97, 238, 0.1);
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .dashboard-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .btn-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      
+      .btn {
+        flex: 1 1 120px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="star-bg"></div>
-  <div class="container position-relative">
-    <div class="mb-4 d-flex justify-content-between align-items-center">
-      <h2>Welcome, <span id="studentName">Student</span> 👋</h2>
-      <button class="btn logout-btn" onclick="logout()">Logout</button>
-    </div>
-
-    <div class="row">
-      <!-- Career Selection -->
-      <div class="col-md-4">
-        <div class="card p-4 text-center">
-          <h5 class="mb-3">Choose Career</h5>
-          <a href="college-list.html?career=engineering" class="btn btn-primary mb-2">Engineering</a>
-          <a href="college-list.html?career=management" class="btn btn-primary">Management</a>
-        </div>
+  <div class="container">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="welcome-text">
+        <h2>Welcome, <span id="studentName">Student</span></h2>
       </div>
+      <button class="btn logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </header>
 
-      <!-- Location Preference -->
-      <div class="col-md-4">
-        <div class="card p-4 text-center">
-          <h5 class="mb-3">Study Location</h5>
-          <a href="college-list.html?location=india" class="btn btn-primary mb-2">India</a>
-          <a href="college-list.html?location=abroad" class="btn btn-primary">Abroad</a>
+    <!-- Main Content -->
+    <main>
+      <div class="card-grid">
+        <!-- Career Selection -->
+        <div class="card">
+          <h5><i class="fas fa-briefcase"></i> Choose Career</h5>
+          <div class="btn-group">
+            <a href="college-list.html?career=engineering" class="btn btn-primary">
+              <i class="fas fa-cogs"></i> Engineering
+            </a>
+            <a href="college-list.html?career=management" class="btn btn-primary">
+              <i class="fas fa-chart-line"></i> Management
+            </a>
+            <!-- Additional career options -->
+            <a href="college-list.html?career=medical" class="btn btn-primary">
+              <i class="fas fa-heartbeat"></i> Medical
+            </a>
+            <a href="college-list.html?career=arts" class="btn btn-primary">
+              <i class="fas fa-palette"></i> Arts
+            </a>
+          </div>
         </div>
-      </div>
 
-      <!-- Aptitude Test -->
-      <div class="col-md-4">
-        <div class="card p-4 text-center">
-          <h5 class="mb-3">Aptitude Test</h5>
-          <a href="aptitude-test.html" class="btn btn-primary">Take Test</a>
+        <!-- Location Preference -->
+        <div class="card">
+          <h5><i class="fas fa-globe"></i> Study Location</h5>
+          <div class="btn-group">
+            <a href="college-list.html?location=india" class="btn btn-primary">
+              <i class="fas fa-map-marker-alt"></i> India
+            </a>
+            <a href="college-list.html?location=abroad" class="btn btn-primary">
+              <i class="fas fa-plane"></i> Abroad
+            </a>
+            <!-- Additional location options -->
+            <a href="college-list.html?location=usa" class="btn btn-primary">
+              <i class="fas fa-flag-usa"></i> USA
+            </a>
+            <a href="college-list.html?location=europe" class="btn btn-primary">
+              <i class="fas fa-flag-eu"></i> Europe
+            </a>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row mt-3">
-      <!-- My Applications -->
-      <div class="col-md-6">
-        <div class="card p-4 text-center">
-          <h5 class="mb-3">My Applications</h5>
-          <a href="my-applications.html" class="btn btn-outline-primary">View Applied Colleges</a>
-        </div>
-      </div>
-
-      <!-- Test Results -->
-      <div class="col-md-6">
-        <div class="card p-4 text-center">
-          <h5 class="mb-3">My Test Score</h5>
-          <div id="scoreSection">
-            <p class="mt-2" id="testScore">Loading score...</p>
-            <a href="test-result.html" class="btn btn-outline-success mt-2">View Full Result</a>
+        <!-- Aptitude Test -->
+        <div class="card">
+          <h5><i class="fas fa-clipboard-check"></i> Aptitude Test</h5>
+          <div class="btn-group">
+            <a href="aptitude-test.html" class="btn btn-primary">
+              <i class="fas fa-play"></i> Take Test
+            </a>
+            <a href="test-results.html" class="btn btn-primary">
+              <i class="fas fa-chart-bar"></i> View Results
+            </a>
           </div>
         </div>
       </div>
-    </div>
+
+      <div class="card-grid">
+        <!-- My Applications -->
+        <div class="card">
+          <h5><i class="fas fa-file-alt"></i> My Applications</h5>
+          <div class="btn-group">
+            <a href="my-applications.html" class="btn btn-outline">
+              <i class="fas fa-eye"></i> View Applied Colleges
+            </a>
+            <a href="application-status.html" class="btn btn-outline">
+              <i class="fas fa-tasks"></i> Check Status
+            </a>
+            <a href="saved-colleges.html" class="btn btn-outline">
+              <i class="fas fa-bookmark"></i> Saved Colleges
+            </a>
+          </div>
+        </div>
+
+        <!-- Test Score -->
+        <div class="card">
+          <h5><i class="fas fa-star"></i> My Test Score</h5>
+          <div id="scoreSection">
+            <div class="score-display" id="testScore">Loading score...</div>
+            <div class="btn-group">
+              <a href="test-result.html" class="btn btn-outline">
+                <i class="fas fa-chart-pie"></i> View Full Result
+              </a>
+              <a href="career-suggestions.html" class="btn btn-outline">
+                <i class="fas fa-lightbulb"></i> Career Suggestions
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <h5><i class="fas fa-bolt"></i> Quick Actions</h5>
+          <div class="btn-group">
+            <a href="scholarships.html" class="btn btn-outline">
+              <i class="fas fa-award"></i> Scholarships
+            </a>
+            <a href="calendar.html" class="btn btn-outline">
+              <i class="fas fa-calendar-alt"></i> Application Calendar
+            </a>
+            <a href="consultant.html" class="btn btn-outline">
+              <i class="fas fa-user-tie"></i> Talk to Consultant
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 
   <script>
+    // Firebase Auth
     const auth = firebase.auth();
     const db = firebase.firestore();
 
@@ -150,17 +323,28 @@
 
       const uid = user.uid;
 
+      // Get user data
       db.collection("users").doc(uid).get().then((doc) => {
-        const name = doc.exists ? doc.data().firstname : "Student";
-        document.getElementById("studentName").innerText = name;
+        if (doc.exists) {
+          const name = doc.data().firstname || "Student";
+          document.getElementById("studentName").innerText = name;
+        }
       });
 
+      // Get test score
       db.collection("aptitude_results").doc(uid).get().then((doc) => {
+        const scoreEl = document.getElementById("testScore");
         if (doc.exists) {
           const score = doc.data().score;
-          document.getElementById("testScore").innerText = `Your Score: ${score} / 15`;
+          scoreEl.innerHTML = `Your Score: <strong>${score}/15</strong>`;
+          
+          // Add emoji based on score
+          let emoji = "😊";
+          if (score >= 12) emoji = "🎉";
+          else if (score <= 5) emoji = "😟";
+          scoreEl.innerHTML += ` ${emoji}`;
         } else {
-          document.getElementById("testScore").innerText = "You haven't taken the test yet.";
+          scoreEl.textContent = "You haven't taken the test yet";
         }
       });
     });
@@ -173,4 +357,3 @@
   </script>
 </body>
 </html>
-

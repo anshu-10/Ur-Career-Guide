@@ -1,106 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UR Career Guide - Home</title>
-
-  <!-- Font Awesome & Google Fonts -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UR Career Guide - Your Career Path Starts Here</title>
+  
+  <!-- Fonts & Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #3f37c9;
+      --accent: #4cc9f0;
+      --dark: #1b263b;
+      --light: #f8f9fa;
+      --light-bg: #FFFBDE;
+      --card-blue: #91C8E4;
+      --card-blue-hover: #749BC2;
+      --text-dark: #2b2d42;
+      --text-light: #f8f9fa;
+      --overlay: rgba(0, 0, 0, 0.5);
+      --glass-effect: rgba(255, 255, 255, 0.15);
+      --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
     * {
       margin: 0;
       padding: 0;
-      font-family: 'Poppins', sans-serif;
       box-sizing: border-box;
     }
 
     body, html {
       height: 100%;
       scroll-behavior: smooth;
+      font-family: 'Poppins', sans-serif;
     }
 
-    .main_box {
+    /* Hero Section */
+    .hero {
+      position: relative;
       background: url("assets/stairs.jpg") no-repeat center center/cover;
       height: 100vh;
-      position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .main_box::before {
+    .hero::before {
       content: "";
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: var(--overlay);
       z-index: 0;
     }
 
-    .welcome-box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      text-align: center;
-      z-index: 1;
-    }
-
-    .welcome-box h1 {
-      font-size: 3.2rem;
-      margin-bottom: 10px;
-    }
-
-    .welcome-box p {
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-    }
-
-    .welcome-box a {
-      text-decoration: none;
-      background: #FF4B2B;
-      padding: 12px 35px;
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-
-    .welcome-box a:hover {
-      background: #ff6745;
-    }
-
-    .scroll-down {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      font-size: 1.2rem;
-      animation: bounce 2s infinite;
-      z-index: 1;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translate(-50%, 0); }
-      50% { transform: translate(-50%, -10px); }
-    }
-
-    .slogan {
-      position: absolute;
-      color: white;
-      font-size: 1rem;
-      max-width: 200px;
+    /* Welcome Content */
+    .welcome-content {
+      position: relative;
       z-index: 2;
+      text-align: center;
+      color: white;
+      padding: 0 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .welcome-content h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .welcome-content p {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      margin-bottom: 2rem;
       opacity: 0.9;
     }
 
-    .slogan.top-left { top: 20px; left: 20px; }
-    .slogan.top-right { top: 20px; right: 20px; text-align: right; }
-    .slogan.bottom-left { bottom: 20px; left: 20px; }
-    .slogan.bottom-right { bottom: 20px; right: 20px; text-align: right; }
+    .cta-button {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+      border: 2px solid transparent;
+    }
 
+    .cta-button:hover {
+      background: transparent;
+      color: white;
+      border-color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+    }
+
+    /* Slogans */
+    .slogan {
+      position: absolute;
+      color: white;
+      font-size: clamp(0.8rem, 1.5vw, 1rem);
+      max-width: 220px;
+      z-index: 2;
+      padding: 15px;
+      background: var(--glass-effect);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border-radius: 10px;
+      border: 1px solid var(--glass-effect);
+      transition: var(--transition);
+    }
+
+    .slogan:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.05);
+    }
+
+    .slogan.top-left { top: 30px; left: 30px; }
+    .slogan.top-right { top: 30px; right: 30px; text-align: right; }
+    .slogan.bottom-left { bottom: 80px; left: 30px; }
+    .slogan.bottom-right { bottom: 80px; right: 30px; text-align: right; }
+
+    /* Grid Corners - Enhanced */
     .grid-corner {
       position: absolute;
       width: 160px;
@@ -108,8 +138,13 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: repeat(2, 1fr);
-      gap: 4px;
+      gap: 5px;
       z-index: 1;
+      transition: var(--transition);
+    }
+
+    .grid-corner:hover {
+      transform: scale(1.05);
     }
 
     .grid-corner div {
@@ -118,92 +153,218 @@
       background-color: rgba(255, 255, 255, 0.2);
       background-size: cover;
       background-position: center;
-      border-radius: 4px;
-      transition: transform 0.3s ease;
+      border-radius: 5px;
+      transition: var(--transition);
     }
 
     .grid-corner div:hover {
-      transform: scale(1.1);
+      transform: scale(1.2);
+      z-index: 3;
     }
 
     .grid-corner.bottom-right-corner div:nth-child(even) {
       background-image: url('assets/stress.jpg');
     }
 
-    .top-left-corner { top: 20px; left: 20px; }
-    .top-right-corner { top: 20px; right: 20px; }
-    .bottom-left-corner { bottom: 20px; left: 20px; }
-    .bottom-right-corner { bottom: 20px; right: 20px; }
+    .top-left-corner { top: 30px; left: 30px; }
+    .top-right-corner { top: 30px; right: 30px; }
+    .bottom-left-corner { bottom: 30px; left: 30px; }
+    .bottom-right-corner { bottom: 30px; right: 30px; }
 
-    .bottom_panel {
-      background: #FFFBDE;
-      padding: 60px 20px;
+    /* Scroll Down */
+    .scroll-down {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 1.5rem;
+      animation: bounce 2s infinite;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -10px); }
+    }
+
+    /* Features Section */
+    .features {
+      background: var(--light-bg);
+      padding: 80px 20px;
       text-align: center;
-      transition: all 0.3s;
     }
 
-    .bottom_panel h2 {
-      font-size: 2.4rem;
-      color: #4682A9;
-      margin-bottom: 30px;
+    .features h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: var(--secondary);
+      margin-bottom: 50px;
+      position: relative;
+      display: inline-block;
     }
 
-    .bottom_panel .grid {
+    .features h2::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
       max-width: 1000px;
-      margin: auto;
+      margin: 0 auto;
     }
 
-    .bottom_panel .grid div {
-      background: #91C8E4;
-      padding: 25px;
-      border-radius: 10px;
+    .feature-card {
+      background: var(--card-blue);
+      padding: 30px 20px;
+      border-radius: 15px;
       color: white;
-      font-size: 1rem;
-      transition: transform 0.3s, background 0.3s;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
     }
 
-    .bottom_panel .grid div:hover {
-      transform: translateY(-8px);
-      background: #749BC2;
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+      z-index: -1;
     }
 
+    .feature-card:hover {
+      transform: translateY(-10px);
+      background: var(--card-blue-hover);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .feature-card i {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+
+    .feature-card:hover i {
+      transform: scale(1.1);
+    }
+
+    .feature-card a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-block;
+      margin-top: 15px;
+      position: relative;
+    }
+
+    .feature-card a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: var(--transition);
+    }
+
+    .feature-card:hover a::after {
+      width: 100%;
+    }
+
+    /* Footer */
     footer {
-      background: #343a40;
+      background: var(--dark);
       color: white;
-      padding: 30px 15px;
-      font-size: 14px;
+      padding: 40px 15px;
       text-align: center;
+    }
+
+    .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    footer p {
+      margin-bottom: 10px;
     }
 
     footer a {
-      color: #91C8E4;
+      color: var(--accent);
       text-decoration: none;
+      transition: var(--transition);
     }
 
     footer a:hover {
-      color: #FF4B2B;
+      color: white;
+      text-decoration: underline;
+    }
+
+    .copyright {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .slogan, .grid-corner {
+        display: none;
+      }
+      
+      .slogan.top-left {
+        display: block;
+        max-width: calc(100% - 60px);
+        text-align: center;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .feature-card {
+        padding: 25px 15px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="main_box">
-    <div class="welcome-box">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="welcome-content">
       <h1>Welcome to UR Career Guide</h1>
       <p>Explore, Apply & Build Your Future Today</p>
-      <a href="#more">Discover More</a>
+      <a href="#features" class="cta-button">Discover More</a>
     </div>
+
     <div class="scroll-down">
       <i class="fas fa-chevron-down"></i>
     </div>
 
+    <!-- Slogans -->
     <div class="slogan top-left">Your one-stop solution to choose the right career path.</div>
     <div class="slogan top-right">Sign up or log in to get started with your journey.</div>
     <div class="slogan bottom-left">Let's shape your future together.</div>
     <div class="slogan bottom-right">Empowering students, one step at a time.</div>
 
+    <!-- Grid Corners -->
     <div class="grid-corner top-left-corner">
       <div></div><div></div><div></div><div></div>
       <div></div><div></div><div></div><div></div>
@@ -220,23 +381,64 @@
       <div></div><div></div><div></div><div></div>
       <div></div><div></div><div></div><div></div>
     </div>
-  </div>
+  </section>
 
-  <div class="bottom_panel" id="more">
+  <!-- Features Section -->
+  <section class="features" id="features">
     <h2>Navigate Your Career Smartly</h2>
-    <div class="grid">
-      <div><i class="fas fa-sign-in-alt"></i> <br> <a href="login.html">Login</a></div>
-      <div><i class="fas fa-user-plus"></i> <br> <a href="signup.html">Sign Up</a></div>
-      <div><i class="fas fa-university"></i> <br> <a href="college-list.html">Explore Colleges</a></div>
-      <div><i class="fas fa-lightbulb"></i> <br> <a href="aptitude-test.html">Aptitude Test</a></div>
-      <div><i class="fas fa-list-check"></i> <br> <a href="my-applications.html">My Applications</a></div>
-      <div><i class="fas fa-user-cog"></i> <br> <a href="admin.html">Admin Panel</a></div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <i class="fas fa-sign-in-alt"></i>
+        <a href="login.html">Login</a>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-user-plus"></i>
+        <a href="signup.html">Sign Up</a>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-university"></i>
+        <a href="college-list.html">Explore Colleges</a>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-lightbulb"></i>
+        <a href="aptitude-test.html">Aptitude Test</a>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-list-check"></i>
+        <a href="my-applications.html">My Applications</a>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-user-cog"></i>
+        <a href="admin.html">Admin Panel</a>
+      </div>
     </div>
-  </div>
+  </section>
 
+  <!-- Footer -->
   <footer>
-    <p>Project by <strong>Anshu Jamare</strong> • Contact: <a href="tel:+918888888888">+91 88888 88888</a> • Mail: <a href="mailto:support@urcareerguide.com">support@urcareerguide.com</a></p>
-    <p>&copy; 2025 UR Career Guide. All rights reserved.</p>
+    <div class="footer-content">
+      <p>Project by <strong>Anshu Jamare</strong> • Contact: <a href="tel:+918888888888">+91 88888 88888</a> • Mail: <a href="mailto:support@urcareerguide.com">support@urcareerguide.com</a></p>
+      <p class="copyright">&copy; 2025 UR Career Guide. All rights reserved.</p>
+    </div>
   </footer>
+
+  <script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Scroll down button functionality
+    document.querySelector('.scroll-down').addEventListener('click', () => {
+      document.getElementById('features').scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  </script>
 </body>
 </html>
